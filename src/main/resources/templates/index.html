@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
-<body>
+<body class="container">
 
 <h1>Coding Events</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
+
+<th:block th:replace="fragments :: javascript"></th:block>
 
 </body>
 </html>
