@@ -9,6 +9,11 @@
 </head>
 <body>
 
+<header th:fragment="header">
+    <h1 th:text="${title}">Title</h1>
+    <nav th:replace="fragments :: navigation"></nav>
+</header>
+
 <nav th:fragment="navigation">
     <ul class="nav">
         <li class="nav-item"><a class="nav-link" href="/events">All Events</a></li>
