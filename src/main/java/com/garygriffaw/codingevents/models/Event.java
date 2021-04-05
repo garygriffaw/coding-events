@@ -1,12 +1,17 @@
 package com.garygriffaw.codingevents.models;
 
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 
+@Entity
 public class Event {
 
+    @Id
+    @GeneratedValue
     private int id;
-    private static int nextId = 1;
 
     @NotBlank(message = "Name is required.")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
@@ -19,25 +24,16 @@ public class Event {
     @Email(message = "Invalid email.  Please try again.")
     private String contactEmail;
 
-    @NotBlank(message = "Location is required.")
-    private String location;
+    private EventType type;
 
-    @AssertTrue(message = "Registration Required must be true.")
-    private boolean mustRegister;
-
-    @Min(value = 1, message = "Number of Attendees must be at least 1.")
-    private int numberOfAttendees;
-
-    public Event(String name, String description, String contactEmail) {
-        this();
+    public Event(String name, String description, String contactEmail, EventType type) {
         this.name = name;
         this.description = description;
         this.contactEmail = contactEmail;
+        this.type = type;
     }
 
     public Event() {
-        this.id = nextId;
-        nextId++;
     }
 
     @Override
@@ -91,27 +87,11 @@ public class Event {
         this.contactEmail = contactEmail;
     }
 
-    public String getLocation() {
-        return location;
+    public EventType getType() {
+        return type;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public boolean isMustRegister() {
-        return mustRegister;
-    }
-
-    public void setMustRegister(boolean mustRegister) {
-        this.mustRegister = mustRegister;
-    }
-
-    public int getNumberOfAttendees() {
-        return numberOfAttendees;
-    }
-
-    public void setNumberOfAttendees(int numberOfAttendees) {
-        this.numberOfAttendees = numberOfAttendees;
+    public void setType(EventType type) {
+        this.type = type;
     }
 }

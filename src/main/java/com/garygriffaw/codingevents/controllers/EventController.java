@@ -1,31 +1,35 @@
 package com.garygriffaw.codingevents.controllers;
 
-import com.garygriffaw.codingevents.data.EventData;
+import com.garygriffaw.codingevents.data.EventRepository;
 import com.garygriffaw.codingevents.models.Event;
+import com.garygriffaw.codingevents.models.EventType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("events")
 public class EventController {
 
+    @Autowired
+    private EventRepository eventRepository;
+
     @GetMapping
     public String displayAllEvents(Model model) {
         model.addAttribute("title", "All Events");
-        model.addAttribute("events", EventData.getAll());
+        model.addAttribute("events", eventRepository.findAll());
         return "events/index";
     }
 
     @GetMapping("create")
-    public String renderCreateEventForm(Model model) {
+    public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
         model.addAttribute(new Event());
+        model.addAttribute("types", EventType.values());
         return "events/create";
     }
 
@@ -36,7 +40,7 @@ public class EventController {
             return "events/create";
         }
 
-        EventData.add(newEvent);
+        eventRepository.save(newEvent);
 
         return "redirect:";
     }
@@ -44,7 +48,7 @@ public class EventController {
     @GetMapping("delete")
     public String displayDeleteEventForm(Model model) {
         model.addAttribute("title", "Delete Events");
-        model.addAttribute("events", EventData.getAll());
+        model.addAttribute("events", eventRepository.findAll());
         return "events/delete";
     }
 
@@ -52,7 +56,7 @@ public class EventController {
     public String processDeleteEventForm(@RequestParam(required = false) int[] eventIds) {
         if (eventIds != null)
             for (int id : eventIds) {
-                EventData.remove(id);
+                eventRepository.deleteById(id);
             }
 
         return "redirect:";
@@ -60,7 +64,7 @@ public class EventController {
 
     @GetMapping("edit/{eventId}")
     public String displayEditForm(Model model, @PathVariable int eventId) {
-        Event editEvent = EventData.getById(eventId);
+        Event editEvent = eventRepository.findById(eventId).get();
         model.addAttribute("title", "Edit Event " + editEvent.getName() + "(id=" + editEvent.getId() + ")");
         model.addAttribute("event", editEvent);
         return "events/edit";
@@ -68,7 +72,7 @@ public class EventController {
 
     @PostMapping("edit")
     public String processEditForm(int eventId, String name, String description) {
-        Event event = EventData.getById(eventId);
+        Event event = eventRepository.findById(eventId).get();
         event.setName(name);
         event.setDescription(description);
 
