@@ -1,17 +1,11 @@
 package com.garygriffaw.codingevents.models;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-public class EventCategory {
-
-    @Id
-    @GeneratedValue
-    private int id;
+public class EventCategory extends AbstractEntity {
 
     @NotBlank(message = "Name is required.")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
@@ -24,11 +18,14 @@ public class EventCategory {
     public EventCategory() {
     }
 
-    // Getters and Setters
-    public int getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "EventCategory{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
+    // Getters and Setters
     public String getName() {
         return name;
     }
